@@ -1,0 +1,67 @@
+name: Tests
+on: push
+
+jobs:
+  dependencies:
+    name: Dependencies
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+    - name: Cache dependencies
+      id: cache-dependencies
+      uses: actions/cache@v1
+      with:
+        path: vendor/
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+    - name:  Install dependencies
+      if: steps.cache-dependencies.outputs.cache-hit != 'true'
+      run: composer install --no-progress --no-scripts
+
+  test_unitaire:
+    name: Test unitaire
+    runs-on: ubuntu-latest
+    needs: dependencies
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+    - name: Cache dependencies
+      id: cache-dependencies
+      uses: actions/cache@v1
+      with:
+        path: vendor/
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+    - name: Run test
+      run: bin/phpunit tests/Unit
+
+  test_integration:
+    name: Test intégration
+    runs-on: ubuntu-latest
+    needs: dependencies
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+    - name: Cache dependencies
+      id: cache-dependencies
+      uses: actions/cache@v1
+      with:
+        path: vendor/
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+    - name: Run test
+      run: bin/phpunit tests/Integration
+
+  test_functionnal:
+    name: Test fonctionnel
+    runs-on: ubuntu-latest
+    needs: dependencies
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+    - name: Cache dependencies
+      id: cache-dependencies
+      uses: actions/cache@v1
+      with:
+        path: vendor/
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+    - name: Run test
+      run: php vendor/bin/behat
