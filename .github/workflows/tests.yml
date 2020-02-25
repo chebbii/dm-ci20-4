@@ -1,0 +1,33 @@
+name: A workflow Test
+on: push
+jobs:
+
+
+  unit:
+    
+    name: Test unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: make install
+      - run: make test_unit
+
+  integration:
+    
+
+    name: Test integration 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: make install
+      - run: make test_integration
+
+  functionnal:
+    
+
+    name: Test fonctionnel
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: make install
+      - run: make test_functional
